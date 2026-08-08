@@ -24,7 +24,7 @@ pipeline{
         }
         stage('Build and tag'){
             steps{
-                sh 'docker build -t mkumar060/devproject-01'
+                sh 'docker build -t mkumar060/devproject-01 .'
             }
         }
         stage('Containerization'){
