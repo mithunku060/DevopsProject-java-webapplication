@@ -1,0 +1,50 @@
+pipeline{
+    agent any
+    
+    tools{
+        jdk 'java-11'
+        maven 'maven'
+    }
+    
+    stages{
+        stage('Git-checkout'){
+            steps{
+                git branch: 'main' , url: 'https://github.com/mithunku060/DevopsProject-java-webapplication.git'
+            }
+        }
+        stage('code compile'){
+            steps{
+                sh 'mvn compile'
+            }
+        }
+        stage('code package'){
+            steps{
+                sh 'mvn clean install'
+            }
+        }
+        stage('Build and tag'){
+            steps{
+                sh 'docker build -t mkumar060/devproject-01'
+            }
+        }
+        stage('Containerization'){
+            steps{
+                sh 'docker run -it -d --name cont1 -p 9008:8080 mkumar060/devproject-01'
+            }
+        }
+        stage('Log in to Docker Hub'){
+            steps{
+                script{
+                    withCredentials([usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'docker_PASS', usernameVariable: 'docker_USER')]){
+                        sh 'echo "$docker_PASS" | docker login -u "$docker_USER" --password-stdin'
+                    }
+                }
+            }
+        }
+        stage('Pushing image to repository'){
+            steps{
+                sh 'docker push mkumar060/devproject-01'
+            }
+        }
+    }
+}
