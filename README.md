@@ -21,6 +21,12 @@ A complete end-to-end DevOps CI/CD pipeline demonstrating automated code checkou
 4. **Registry Push:** The built image is securely pushed to **Docker Hub**.
 5. **Deployment:** A container is launched from the image, mapping **Port 9008** on the host to **Port 8080** inside the container running Tomcat.
 
+### 🔑 Important Jenkins Docker Permission Fix
+To allow Jenkins to execute Docker commands without running into permission denied errors, grant the Jenkins user access to the Docker socket by running:
+
+```bash
+sudo usermod -aG docker jenkins
+sudo systemctl restart jenkins
 ---
 
 ## 🚀 How to Run Locally / Manually
